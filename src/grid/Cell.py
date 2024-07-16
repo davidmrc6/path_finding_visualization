@@ -1,25 +1,21 @@
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QGraphicsRectItem
 from PyQt5.QtGui import QPainter, QColor, QBrush
 from PyQt5.QtCore import QRectF, Qt
 
-class Cell(QWidget):
+class Cell(QGraphicsRectItem):
         def __init__(self, x, y, size):
-            super().__init__()
-            self.x = x
-            self.y = y
-            self.size = size
+            super().__init__(0, 0, size, size)
+            self.setPos(x * size, y * size)
             self.state = 'white'
-            self.setFixedSize(size, size)
+            self.updateColor()
 
-        def paintEvent(self, event):
-            painter = QPainter(self)
+        def updateColor(self):
             if self.state == 'white':
                 color = QColor(255, 255, 255)
             # TODO add more colors later
             
             # TODO add exception handling when no color is set
-            painter.setBrush(QBrush(color))
-            painter.drawRect(0, 0, self.size, self.size)
+            self.setBrush(QBrush(color))
             
         def setState(self, state):
             self.state = state
