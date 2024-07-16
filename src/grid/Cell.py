@@ -4,17 +4,23 @@ from PyQt5.QtCore import QRectF, Qt
 
 class Cell(QWidget):
         def __init__(self, x, y, size):
-            super().__init__(x, y, size, size)
-            self.state = None
+            super().__init__()
+            self.x = x
+            self.y = y
+            self.size = size
+            self.state = 'white'
+            self.setFixedSize(size, size)
 
-        def draw(self, painter):
-            if self.state == 'start':
-                painter.setBrush(QColor(0, 255, 0))  # Green
-            elif self.state == 'end':
-                painter.setBrush(QColor(255, 0, 0))  # Red
-            elif self.state == 'obstacle':
-                painter.setBrush(QColor(0, 0, 0))  # Black
-            else:
-                painter.setBrush(QColor(255, 255, 255))  # White
-
-            painter.drawRect(self)
+        def paintEvent(self, event):
+            painter = QPainter(self)
+            if self.state == 'white':
+                color = QColor(255, 255, 255)
+            # TODO add more colors later
+            
+            # TODO add exception handling when no color is set
+            painter.setBrush(QBrush(color))
+            painter.drawRect(0, 0, self.size, self.size)
+            
+        def setState(self, state):
+            self.state = state
+            self.update()
