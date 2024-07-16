@@ -1,8 +1,8 @@
-from PyQt5.QtCore import QRectF
-from PyQt5.QtGui import QColor
+from PyQt5.QtWidgets import QWidget
+from PyQt5.QtGui import QPainter, QColor, QBrush
+from PyQt5.QtCore import QRectF, Qt
 
-
-class Cell(QRectF):
+class Cell(QWidget):
         def __init__(self, x, y, size):
             super().__init__(x, y, size, size)
             self.state = None
