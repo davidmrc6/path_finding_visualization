@@ -2,6 +2,14 @@ from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton
 from PyQt5.QtCore import Qt
 
 class AlgorithmSelectionDialog(QDialog):
+    
+    algorithms = {
+        'bfs': 'Breadth-First Search',
+        'dfs': 'Depth-First Search',
+        'dijkstra': 'Dijkstra`s Algorithm',
+        'astar': 'A* algorithm'
+    }
+    
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Select Path Finding Algorithm")
@@ -15,24 +23,22 @@ class AlgorithmSelectionDialog(QDialog):
         layout.addWidget(title)
 
         buttonLayout = QVBoxLayout()
-
-        bfsButton = QPushButton("Breadth-First Search")
-        bfsButton.clicked.connect(self.selectBfs)
-        buttonLayout.addWidget(bfsButton)
-
-        # Add more algorithm buttons here
-        # dfs_button = QPushButton("Depth-First Search")
-        # dfs_button.clicked.connect(self.select_dfs)
-        # button_layout.addWidget(dfs_button)
+        
+        # TODO fix repetition of code
+        
+        for key in self.algorithms.keys():
+            button = QPushButton(self.algorithms[key])
+            button.clicked.connect(self.selectAlgorithm)
+            buttonLayout.addWidget(button)
+        
+        #bfsButton = QPushButton("Breadth-First Search")
+        #bfsButton.clicked.connect(self.selectBfs)
+        #buttonLayout.addWidget(bfsButton)
 
         layout.addLayout(buttonLayout)
 
         self.setLayout(layout)
-
-    def selectBfs(self):
-        self.selectedAlgorithm = 'bfs'
+    
+    def selectAlgorithm(self, key) -> None:
+        self.selectedAlgorithm = key
         self.accept()
-
-    # def selectDfs(self):
-    #     self.selectedAlgorithm = 'dfs'
-    #     self.accept()
