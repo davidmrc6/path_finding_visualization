@@ -17,7 +17,24 @@ class GridEventHandler:
             
             # Left button is used for setting start and end nodes
             if event.button() == Qt.LeftButton:
-                pass
+                # Start node
+                if item.getState() == 'empty' and self.gridWidget.getStartNodeState() == False:
+                    item.setState('start')
+                    self.gridWidget.updateStartNodeState()
+                    self.showPopupText(item, 'Start')
+                elif item.getState() == 'start':
+                    item.setState('empty')
+                    self.gridWidget.updateStartNodeState()
+                    self.showPopupText(item, 'Empty')
+                # End node
+                if item.getState() == 'empty' and self.gridWidget.getEndNodeState() == False:
+                    item.setState('end')
+                    self.gridWidget.updateEndNodeState()
+                    self.showPopupText(item, 'End')
+                elif item.getState() == 'end':
+                    item.setState('empty')
+                    self.gridWidget.updateEndNodeState()
+                    self.showPopupText(item, 'Empty')
             
             # Right button is used for setting (and removing) obstacles
             if event.button() == Qt.RightButton:

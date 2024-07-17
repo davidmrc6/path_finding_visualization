@@ -20,6 +20,9 @@ class GridWidget(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.eventHandler = GridEventHandler(self)
+        
+        self.hasStartNode = False
+        self.hasEndNode = False
     
     '''
     Initializes grid of cell objects
@@ -37,6 +40,18 @@ class GridWidget(QGraphicsView):
         if 0 <= row < self.rows and 0 <= col < self.cols:
             self.cells[row][col].setState(state)
             
+    def getStartNodeState(self) -> bool:
+        return self.hasStartNode
+            
+    def updateStartNodeState(self) -> None:
+        self.hasStartNode = not self.hasStartNode
+            
+    def getEndNodeState(self) -> bool:
+        return self.hasEndNode
+    
+    def updateEndNodeState(self) -> None:
+        self.hasEndNode = not self.hasEndNode 
+    
     '''
     Forwards mouse events to eventHandler
     ''' 
