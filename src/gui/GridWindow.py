@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import QMainWindow, QPushButton
 from PyQt5.QtCore import pyqtSlot
 from src.grid.GridWidget import GridWidget
 from src.solvers.BFSearch import BFSearch
+from src.gui.AlgorithmSelectionDialog import AlgorithmSelectionDialog
+from PyQt5.QtWidgets import QDialog, QWidget
 import os
 
 class GridWindow(QMainWindow):
@@ -30,7 +32,23 @@ class GridWindow(QMainWindow):
         
     def solverClicked(self) -> None:
         print("Solve button clicked")
-        self.bfs.start_search()
+        overlay = self.showBlurOverlay()
+        dialog = AlgorithmSelectionDialog(self)
+        if dialog.exec_() == QDialog.Accepted:
+            selectedAlgorithm = dialog.selectedAlgorithm
+            if selectedAlgorithm == 'bfs':
+                self.bfs.start_search()
+            # elif selectedAlgorithm == 'dfs':
+            #     self.dfs.start_search()
+        overlay.deleteLater()
+    
+    def showBlurOverlay(self):
+        overlay = QWidget(self)
+        overlay.setObjectName("blurOverlay")
+        overlay.setGeometry(self.rect())
+        self.applyStylesheet(overlay, 'src/styles.qss')
+        overlay.show()
+        return overlay
         
     @pyqtSlot()
     def closeEvent(self, event):
