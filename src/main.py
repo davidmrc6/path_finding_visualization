@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QApplication
 
 from src.gui.GridWindow import GridWindow
 from PyQt5.QtGui import QPainter, QColor
-from PyQt5.QtCore import QRectF
+from PyQt5.QtCore import QRectF 
 from PyQt5.QtWidgets import QWidget
 
 if __name__ == '__main__':
