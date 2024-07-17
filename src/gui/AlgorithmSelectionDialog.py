@@ -7,14 +7,17 @@ class AlgorithmSelectionDialog(QDialog):
         'bfs': 'Breadth-First Search',
         'dfs': 'Depth-First Search',
         'dijkstra': 'Dijkstra`s Algorithm',
-        'astar': 'A* algorithm'
+        'astar': 'A* algorithm',
+        'gbfs': 'Greedy Best-First Search',
+        'jps': 'Jump Point Search',
+        'bisearch': 'Bidirectional Search'
     }
     
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Select Path Finding Algorithm")
         self.setWindowModality(Qt.ApplicationModal)
-        self.setFixedSize(300, 200)
+        self.setFixedSize(500, 350)
 
         layout = QVBoxLayout()
 

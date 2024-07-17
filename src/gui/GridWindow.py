@@ -9,6 +9,9 @@ from src.solvers.BFSearch import BFSearch
 from src.solvers.DFSearch import DFSearch
 from src.solvers.DijkstraSearch import DijkstraSearch
 from src.solvers.AStarSearch import AStarSearch
+from src.solvers.GBFSearch import GBFSearch
+from src.solvers.JumpPointSearch import JumpPointSearch
+from src.solvers.BidirectionalSearch import BidirectionalSearch
 
 from src.gui.AlgorithmSelectionDialog import AlgorithmSelectionDialog
 
@@ -33,11 +36,23 @@ class GridWindow(QMainWindow):
         self.astar = AStarSearch(self.gridWidget)
         self.astar.updateCellState.connect(self.gridWidget.setCellState)
         
+        self.gbfs = GBFSearch(self.gridWidget)
+        self.gbfs.updateCellState.connect(self.gridWidget.setCellState)
+        
+        self.jps = JumpPointSearch(self.gridWidget)
+        self.jps.updateCellState.connect(self.gridWidget.setCellState)
+        
+        self.bisearch = BidirectionalSearch(self.gridWidget)
+        self.bisearch.updateCellState.connect(self.gridWidget.setCellState)
+        
         self.algorithmToInstanceMap = {
             'bfs': self.bfs,
             'dfs': self.dfs,
             'dijkstra': self.dijkstra,
-            'astar': self.astar
+            'astar': self.astar,
+            'gbfs': self.gbfs,
+            'jps': self.jps,
+            'bisearch': self.bisearch
         }
         
         self.currentSearch = None # keeps track of current algorithm
