@@ -22,6 +22,14 @@ class GridWindow(QMainWindow):
         self.dfs = DFSearch(self.gridWidget)
         self.dfs.updateCellState.connect(self.gridWidget.setCellState)
         
+        
+        self.algorithmToInstanceMap = {
+            'bfs': self.bfs,
+            'dfs': self.dfs,
+            'dijkstra': None,
+            'astar': None
+        }
+        
         self.currentSearch = None # keeps track of current algorithm
         
     def initUI(self) -> None:
@@ -44,18 +52,7 @@ class GridWindow(QMainWindow):
         if dialog.exec_() == QDialog.Accepted:
             selectedAlgorithm = dialog.getSelectedAlgorithm()
             
-            # TODO fix code repetition
-            if selectedAlgorithm == 'bfs':
-                self.currentSearch = self.bfs
-                
-            elif selectedAlgorithm == 'dfs':
-                self.currentSearch = self.dfs
-                
-            elif selectedAlgorithm == 'dijkstra':
-                self.currentSearch = self.dijkstra
-                
-            elif selectedAlgorithm == 'astar':
-                self.currentSearch = self.astar
+            self.currentSearch = self.algorithmToInstanceMap[selectedAlgorithm]
                 
             if self.currentSearch:
                 self.currentSearch.startSearch()
