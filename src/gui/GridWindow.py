@@ -1,11 +1,16 @@
-from PyQt5.QtWidgets import QMainWindow, QPushButton
+import os
+
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QDialog, QWidget
 from PyQt5.QtCore import pyqtSlot
+
 from src.grid.GridWidget import GridWidget
+
 from src.solvers.BFSearch import BFSearch
 from src.solvers.DFSearch import DFSearch
+from src.solvers.DijkstraSearch import DijkstraSearch
+from src.solvers.AStarSearch import AStarSearch
+
 from src.gui.AlgorithmSelectionDialog import AlgorithmSelectionDialog
-from PyQt5.QtWidgets import QDialog, QWidget
-import os
 
 class GridWindow(QMainWindow):
     
@@ -22,12 +27,17 @@ class GridWindow(QMainWindow):
         self.dfs = DFSearch(self.gridWidget)
         self.dfs.updateCellState.connect(self.gridWidget.setCellState)
         
+        self.dijkstra = DijkstraSearch(self.gridWidget)
+        self.dijkstra.updateCellState.connect(self.gridWidget.setCellState)
+        
+        self.astar = AStarSearch(self.gridWidget)
+        self.astar.updateCellState.connect(self.gridWidget.setCellState)
         
         self.algorithmToInstanceMap = {
             'bfs': self.bfs,
             'dfs': self.dfs,
-            'dijkstra': None,
-            'astar': None
+            'dijkstra': self.dijkstra,
+            'astar': self.astar
         }
         
         self.currentSearch = None # keeps track of current algorithm
