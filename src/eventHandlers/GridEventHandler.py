@@ -14,12 +14,19 @@ class GridEventHandler:
         item = self.gridWidget.scene.itemAt(scenePos, self.gridWidget.transform())
         
         if isinstance(item, Cell):
+            
+            # Left button is used for setting start and end nodes
             if event.button() == Qt.LeftButton:
-                item.setState('obstacle')
-                self.showPopupText(item, 'Obstacle')
-            elif event.button() == Qt.RightButton:
-                item.setState('empty')
-                self.showPopupText(item, 'Empty')
+                pass
+            
+            # Right button is used for setting (and removing) obstacles
+            if event.button() == Qt.RightButton:
+                if item.getState() == 'empty':
+                    item.setState('obstacle')
+                    self.showPopupText(item, 'Obstacle')
+                elif item.getState() == 'obstacle':
+                    item.setState('empty')
+                    self.showPopupText(item, 'Empty')
                 
     def showPopupText(self, cell: Cell, text: str) -> None:
         cellPos = (cell.x(), cell.y())

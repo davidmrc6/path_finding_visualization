@@ -5,7 +5,7 @@ from PyQt5.QtCore import QRectF, Qt
 class Cell(QGraphicsRectItem):
     stateColorMap = {
         'empty': QColor(255, 255, 255),
-        'obstacle': QColor(255, 0, 0),
+        'obstacle': QColor(102, 102, 102),
         'checked': QColor(0, 255, 0),
         'start': QColor(0, 0, 255),
         'end': QColor(255, 255, 0),
@@ -24,3 +24,6 @@ class Cell(QGraphicsRectItem):
     def setState(self, state) -> None:
         self.state = state
         self.updateColor()
+        
+    def getState(self) -> str:
+        return self.state
