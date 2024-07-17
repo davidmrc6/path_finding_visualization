@@ -3,8 +3,10 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainter
 from src.grid.Cell import Cell
 
+from src.eventHandlers.GridEventHandler import GridEventHandler
+
 class GridWidget(QGraphicsView):
-    def __init__(self, rows, cols, cell_size):
+    def __init__(self, rows, cols, cell_size) -> None:
         self.scene = QGraphicsScene()
         super().__init__(self.scene)
         
@@ -15,12 +17,14 @@ class GridWidget(QGraphicsView):
         self.initGrid()
 
         self.setRenderHint(QPainter.Antialiasing)
-        self.setDragMode(QGraphicsView.ScrollHandDrag)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        self.scale(1, 1)  # Initial scale factor
-        
-    def initGrid(self):
+        self.eventHandler = GridEventHandler(self)
+    
+    '''
+    Initializes grid of cell objects
+    '''
+    def initGrid(self) -> None:
         for row in range(self.rows):
             cell_row = []
             for col in range(self.cols):
@@ -29,6 +33,13 @@ class GridWidget(QGraphicsView):
                 cell_row.append(cell)
             self.cells.append(cell_row)
         
-    def setCellState(self, row, col, state):
+    def setCellState(self, row, col, state) -> None:
         if 0 <= row < self.rows and 0 <= col < self.cols:
             self.cells[row][col].setState(state)
+            
+    '''
+    Forwards mouse events to eventHandler
+    ''' 
+    def mousePressEvent(self, event) -> None:
+        self.eventHandler.handleMousePress(event)
+        super().mousePressEvent(event)
