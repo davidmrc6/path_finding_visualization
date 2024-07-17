@@ -3,20 +3,24 @@ from PyQt5.QtGui import QPainter, QColor, QBrush
 from PyQt5.QtCore import QRectF, Qt
 
 class Cell(QGraphicsRectItem):
-        def __init__(self, x, y, size):
-            super().__init__(0, 0, size, size)
-            self.setPos(x * size, y * size)
-            self.state = 'white'
-            self.updateColor()
+    stateColorMap = {
+        'empty': QColor(148, 148, 148),
+        'obstacle': QColor(255, 0, 0),
+        'checked': QColor(0, 255, 0),
+        'start': QColor(0, 0, 255),
+        'end': QColor(255, 255, 0),
+        'path': QColor(255, 0, 255)
+    }
+    def __init__(self, x, y, size):
+        super().__init__(0, 0, size, size)
+        self.setPos(x * size, y * size)
+        self.state = 'empty'
+        self.updateColor()
 
-        def updateColor(self):
-            if self.state == 'white':
-                color = QColor(255, 255, 255)
-            # TODO add more colors later
-            
-            # TODO add exception handling when no color is set
-            self.setBrush(QBrush(color))
-            
-        def setState(self, state):
-            self.state = state
-            self.update()
+    def updateColor(self):
+        color = self.stateColorMap.get(self.state, QColor(255, 255, 255))
+        self.setBrush(QBrush(color))
+        
+    def setState(self, state):
+        self.state = state
+        self.update()

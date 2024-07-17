@@ -31,4 +31,4 @@ class GridWidget(QGraphicsView):
         
     def setCellState(self, row, col, state):
         if 0 <= row < self.rows and 0 <= col < self.cols:
-            self.cells[row][col].set_state(state)
+            self.cells[row][col].setState(state)
