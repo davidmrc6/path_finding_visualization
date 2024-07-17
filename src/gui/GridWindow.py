@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QPushButton
+from PyQt5.QtCore import pyqtSlot
 from src.grid.GridWidget import GridWidget
+from src.solvers.BFSearch import BFSearch
 import os
 
 class GridWindow(QMainWindow):
@@ -9,6 +11,9 @@ class GridWindow(QMainWindow):
         
         self.setWindowTitle('Path Finding Algorithm Visualization')
         self.initUI()
+        
+        self.bfs = BFSearch(self.gridWidget)
+        self.bfs.updateCellState.connect(self.gridWidget.setCellState)
         
     def initUI(self) -> None:
         # Initialize grid widget
@@ -25,6 +30,12 @@ class GridWindow(QMainWindow):
         
     def solverClicked(self) -> None:
         print("Solve button clicked")
+        self.bfs.start_search()
+        
+    @pyqtSlot()
+    def closeEvent(self, event):
+        self.bfs.stop_search()
+        event.accept()
         
     def applyStylesheet(self, widget, stylesheet_path) -> None:
         if os.path.exists(stylesheet_path):

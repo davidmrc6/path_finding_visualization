@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtGui import QPainter
 from src.grid.Cell import Cell
 
@@ -36,6 +36,7 @@ class GridWidget(QGraphicsView):
                 cell_row.append(cell)
             self.cells.append(cell_row)
         
+    @pyqtSlot(int, int, str)
     def setCellState(self, row, col, state) -> None:
         if 0 <= row < self.rows and 0 <= col < self.cols:
             self.cells[row][col].setState(state)

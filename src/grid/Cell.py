@@ -6,7 +6,7 @@ class Cell(QGraphicsRectItem):
     stateColorMap = {
         'empty': QColor(255, 255, 255),
         'obstacle': QColor(102, 102, 102),
-        'checked': QColor(0, 255, 0),
+        'checked': QColor(198, 198, 198),
         'start': QColor(0, 0, 255),
         'end': QColor(255, 255, 0),
         'path': QColor(255, 0, 255)
