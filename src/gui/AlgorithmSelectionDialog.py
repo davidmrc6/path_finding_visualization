@@ -24,11 +24,9 @@ class AlgorithmSelectionDialog(QDialog):
 
         buttonLayout = QVBoxLayout()
         
-        # TODO fix repetition of code
-        
-        for key in self.algorithms.keys():
-            button = QPushButton(self.algorithms[key])
-            button.clicked.connect(self.selectAlgorithm)
+        for key, name in self.algorithms.items():
+            button = QPushButton(name)
+            button.clicked.connect(lambda checked, k=key: self.selectAlgorithm(k))
             buttonLayout.addWidget(button)
         
         #bfsButton = QPushButton("Breadth-First Search")
