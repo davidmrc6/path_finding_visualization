@@ -40,3 +40,6 @@ class AlgorithmSelectionDialog(QDialog):
     def selectAlgorithm(self, key) -> None:
         self.selectedAlgorithm = key
         self.accept()
+        
+    def getSelectedAlgorithm(self) -> str:
+        return self.selectedAlgorithm

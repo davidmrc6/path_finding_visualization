@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QPushButton
 from PyQt5.QtCore import pyqtSlot
 from src.grid.GridWidget import GridWidget
 from src.solvers.BFSearch import BFSearch
+from src.solvers.DFSearch import DFSearch
 from src.gui.AlgorithmSelectionDialog import AlgorithmSelectionDialog
 from PyQt5.QtWidgets import QDialog, QWidget
 import os
@@ -14,8 +15,14 @@ class GridWindow(QMainWindow):
         self.setWindowTitle('Path Finding Algorithm Visualization')
         self.initUI()
         
+        # TODO instantiate search type after selection?
         self.bfs = BFSearch(self.gridWidget)
         self.bfs.updateCellState.connect(self.gridWidget.setCellState)
+        
+        self.dfs = DFSearch(self.gridWidget)
+        self.dfs.updateCellState.connect(self.gridWidget.setCellState)
+        
+        self.currentSearch = None # keeps track of current algorithm
         
     def initUI(self) -> None:
         # Initialize grid widget
@@ -35,11 +42,24 @@ class GridWindow(QMainWindow):
         overlay = self.showBlurOverlay()
         dialog = AlgorithmSelectionDialog(self)
         if dialog.exec_() == QDialog.Accepted:
-            selectedAlgorithm = dialog.selectedAlgorithm
+            selectedAlgorithm = dialog.getSelectedAlgorithm()
+            
+            # TODO fix code repetition
             if selectedAlgorithm == 'bfs':
-                self.bfs.start_search()
-            # elif selectedAlgorithm == 'dfs':
-            #     self.dfs.start_search()
+                self.currentSearch = self.bfs
+                
+            elif selectedAlgorithm == 'dfs':
+                self.currentSearch = self.dfs
+                
+            elif selectedAlgorithm == 'dijkstra':
+                self.currentSearch = self.dijkstra
+                
+            elif selectedAlgorithm == 'astar':
+                self.currentSearch = self.astar
+                
+            if self.currentSearch:
+                self.currentSearch.startSearch()
+            
         overlay.deleteLater()
     
     def showBlurOverlay(self):
@@ -52,7 +72,8 @@ class GridWindow(QMainWindow):
         
     @pyqtSlot()
     def closeEvent(self, event):
-        self.bfs.stop_search()
+        if self.currentSearch:
+            self.currentSearch.stopSearch()
         event.accept()
         
     def applyStylesheet(self, widget, stylesheet_path) -> None:

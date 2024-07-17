@@ -13,7 +13,7 @@ class BFSearch(QObject):
         self.cells = gridWidget.cells
         self._stop_event = threading.Event()
 
-    def find_start_end(self):
+    def findStartEnd(self):
         start = end = None
         for row in range(self.rows):
             for col in range(self.cols):
@@ -24,7 +24,7 @@ class BFSearch(QObject):
         return start, end
 
     def bfs(self):
-        start, end = self.find_start_end()
+        start, end = self.findStartEnd()
         if not start or not end:
             return
         
@@ -45,7 +45,7 @@ class BFSearch(QObject):
             time.sleep(0.05)
 
             if current == end:
-                self.trace_path(parent, end, start)
+                self.tracePath(parent, end, start)
                 return
 
             for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
@@ -55,7 +55,7 @@ class BFSearch(QObject):
                         queue.append((nr, nc))
                         parent[(nr, nc)] = current
 
-    def trace_path(self, parent, end, start):
+    def tracePath(self, parent, end, start):
         current = end
         while current and not self._stop_event.is_set():
             row, col = current
@@ -64,12 +64,12 @@ class BFSearch(QObject):
             current = parent[current]
             time.sleep(0.1)
 
-    def start_search(self):
+    def startSearch(self):
         self._stop_event.clear()
         self.search_thread = threading.Thread(target=self.bfs)
         self.search_thread.start()
 
-    def stop_search(self):
+    def stopSearch(self):
         self._stop_event.set()
         if self.search_thread.is_alive():
             self.search_thread.join()
