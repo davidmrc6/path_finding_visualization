@@ -10,9 +10,6 @@ import sys
 import os
 
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtGui import QPainter, QColor
-from PyQt5.QtCore import QRectF 
-from PyQt5.QtWidgets import QWidget
 
 # Add the src directory to the system path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)))
