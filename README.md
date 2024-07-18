@@ -44,7 +44,7 @@ You are also able to reset the grid system by clicking on the `Reset` button. <b
 * Path finding occurs in separate thread to the UI thread, allowing the UI to remain responsive while the algorithm runs
 
 ## Acknowledgements
-* `PyQt5` library
+* [PyQt5](https://pypi.org/project/PyQt5/)
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
