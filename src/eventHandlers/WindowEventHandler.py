@@ -66,3 +66,11 @@ class WindowEventHandler:
         if os.path.exists(stylesheet_path):
             with open(stylesheet_path, 'r') as file:
                 widget.setStyleSheet(file.read())
+                
+    def noPathFoundHandler(self):
+        QMessageBox.warning(self.grid_window, "No Path Found", "There is no possible path from start to end.")
+
+    def changeSpeed(self):
+        speed = self.grid_window.speedSlider.value()
+        for algorithm in self.grid_window.algorithmToInstanceMap.values():
+            algorithm.setDelay(speed)
