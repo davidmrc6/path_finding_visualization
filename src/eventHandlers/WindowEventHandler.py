@@ -1,7 +1,7 @@
 # src/eventHandlers/WindowEventHandler.py
 
 import os
-from PyQt5.QtWidgets import QWidget, QDialog
+from PyQt5.QtWidgets import QWidget, QDialog, QMessageBox
 from PyQt5.QtCore import pyqtSlot
 
 from src.dialogs.AlgorithmSelectionDialog import AlgorithmSelectionDialog
@@ -13,6 +13,14 @@ class WindowEventHandler:
 
     def solverClicked(self) -> None:
         print("Solve button clicked")
+        
+        if not self.grid_window.gridWidget.getStartNodeState():
+            QMessageBox.critical(self.grid_window, "Error", "Start node is not set.")
+            return
+        if not self.grid_window.gridWidget.getEndNodeState():
+            QMessageBox.critical(self.grid_window, "Error", "End node is not set.")
+            return
+        
         overlay = self.showBlurOverlay()
         dialog = AlgorithmSelectionDialog(self.grid_window)
         if dialog.exec_() == QDialog.Accepted:

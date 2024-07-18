@@ -93,7 +93,8 @@ class BidirectionalSearch(QObject):
                                 self.updateCellState.emit(nr, nc, 'checked')
                             time.sleep(0.05)
                             
-        self.noPathFound.emit()
+        if not self._stop_event.is_set():
+            self.noPathFound.emit()
 
     def startSearch(self):
         self._stop_event.clear()

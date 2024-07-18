@@ -61,7 +61,8 @@ class GBFSearch(QObject):
                             heapq.heappush(open_set, (self.heuristic((nr, nc), end), (nr, nc)))
                             parent[(nr, nc)] = current
                             
-        self.noPathFound.emit()
+        if not self._stop_event.is_set():
+            self.noPathFound.emit()
 
     def tracePath(self, parent, end, start):
         current = end

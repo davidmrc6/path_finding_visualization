@@ -85,7 +85,7 @@ class GridWindow(QMainWindow):
         
     @pyqtSlot()
     def closeEvent(self, event):
-        if self.currentSearch:
+        if self.currentSearch and self.currentSearch.search_thread.is_alive():
             self.currentSearch.stopSearch()
         event.accept()
         

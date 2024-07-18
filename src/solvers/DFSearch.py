@@ -56,7 +56,8 @@ class DFSearch(QObject):
                         stack.append((nr, nc))
                         parent[(nr, nc)] = current
                         
-        self.noPathFound.emit()
+        if not self._stop_event.is_set():
+            self.noPathFound.emit()
 
     def tracePath(self, parent, end, start):
         current = end

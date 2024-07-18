@@ -102,7 +102,8 @@ class JumpPointSearch(QObject):
                         heapq.heappush(open_set, (f_cost, neighbor))
                         parent[neighbor] = current
                         
-        self.noPathFound.emit()
+        if not self._stop_event.is_set():
+            self.noPathFound.emit()
 
     def tracePath(self, parent, end, start):
         current = end
