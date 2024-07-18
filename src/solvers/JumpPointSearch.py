@@ -125,5 +125,8 @@ class JumpPointSearch(QObject):
 
     def stopSearch(self):
         self._stop_event.set()
-        if self.search_thread.is_alive():
+        if self.search_thread and self.search_thread.is_alive():
             self.search_thread.join()
+
+    def isRunning(self):
+        return self.search_thread and self.search_thread.is_alive()

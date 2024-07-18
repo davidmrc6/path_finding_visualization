@@ -93,9 +93,13 @@ class GridWindow(QMainWindow):
         
     @pyqtSlot()
     def closeEvent(self, event):
-        if self.currentSearch and self.currentSearch.search_thread.is_alive():
-            self.currentSearch.stopSearch()
+        self.stopCurrentSearch()
         event.accept()
+        
+    def stopCurrentSearch(self):
+        if self.currentSearch and self.currentSearch.isRunning():
+            self.currentSearch.stopSearch()
+        self.currentSearch = None
         
     def applyStylesheet(self, widget, stylesheet_path) -> None:
         if os.path.exists(stylesheet_path):

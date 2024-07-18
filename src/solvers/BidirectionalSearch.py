@@ -13,8 +13,9 @@ class BidirectionalSearch(QObject):
         self.cols = gridWidget.cols
         self.cells = gridWidget.cells
         self._stop_event = threading.Event()
+        self._stop_event_path = threading.Event()  # Additional stop event for path tracing
         self.delay = 0.05
-        
+
     def setDelay(self, speed):
         self.delay = 1 / speed
 
@@ -44,19 +45,21 @@ class BidirectionalSearch(QObject):
             path_start = []
             path_end = []
             current = meeting_point
-            while current:
+            while current and not self._stop_event_path.is_set():
                 path_start.append(current)
                 current = parent_start[current]
             current = meeting_point
-            while current:
+            while current and not self._stop_event_path.is_set():
                 path_end.append(current)
                 current = parent_end[current]
             full_path = path_start[::-1] + path_end[1:]
             for node in full_path:
+                if self._stop_event_path.is_set():
+                    return
                 row, col = node
                 if node != start and node != end:
                     self.updateCellState.emit(row, col, 'path')
-                time.sleep(self.delay)
+                time.sleep(0.1)
 
         while queue_start and queue_end and not self._stop_event.is_set():
             if queue_start:
@@ -76,7 +79,7 @@ class BidirectionalSearch(QObject):
                                 return
                             if neighbor_start != start and neighbor_start != end:
                                 self.updateCellState.emit(nr, nc, 'checked')
-                            time.sleep(0.05)
+                            time.sleep(self.delay)
 
             if queue_end:
                 current_end = queue_end.pop(0)
@@ -95,17 +98,22 @@ class BidirectionalSearch(QObject):
                                 return
                             if neighbor_end != start and neighbor_end != end:
                                 self.updateCellState.emit(nr, nc, 'checked')
-                            time.sleep(0.05)
-                            
+                            time.sleep(self.delay)
+
         if not self._stop_event.is_set():
             self.noPathFound.emit()
 
     def startSearch(self):
         self._stop_event.clear()
+        self._stop_event_path.clear()
         self.search_thread = threading.Thread(target=self.bidirectionalSearch)
         self.search_thread.start()
 
     def stopSearch(self):
         self._stop_event.set()
-        if self.search_thread.is_alive():
+        self._stop_event_path.set()
+        if self.search_thread and self.search_thread.is_alive():
             self.search_thread.join()
+
+    def isRunning(self):
+        return self.search_thread and self.search_thread.is_alive()
