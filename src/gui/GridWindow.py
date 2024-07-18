@@ -74,6 +74,7 @@ class GridWindow(QMainWindow):
             self.currentSearch = self.algorithmToInstanceMap[selectedAlgorithm]
                 
             if self.currentSearch:
+                self.gridWidget.resetGrid('checked_path')
                 self.currentSearch.startSearch()
             
         overlay.deleteLater()
