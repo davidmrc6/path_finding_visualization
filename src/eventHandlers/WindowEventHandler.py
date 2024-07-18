@@ -1,5 +1,3 @@
-# src/eventHandlers/WindowEventHandler.py
-
 import os
 from PyQt5.QtWidgets import QWidget, QDialog, QMessageBox
 from PyQt5.QtCore import pyqtSlot
