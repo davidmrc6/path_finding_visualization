@@ -5,8 +5,8 @@ Module for defining the main window of the application.
 
 import os
 
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QDialog, QMessageBox
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QDialog, QMessageBox, QSlider
+from PyQt5.QtCore import pyqtSlot, Qt
 
 from src.grid.GridWidget import GridWidget
 
@@ -60,6 +60,14 @@ class GridWindow(QMainWindow):
         resetButton.clicked.connect(self.eventHandler.resetClicked)
         resetButton.setGeometry(120, 10, 100, 30)
         
+        # Initialize speed control slider
+        self.speedSlider = QSlider(Qt.Horizontal, self)
+        self.speedSlider.setObjectName('speedSlider')
+        self.speedSlider.setRange(1, 100)  # Speed range from 1 to 100
+        self.speedSlider.setValue(50)  # Default value
+        self.speedSlider.setGeometry(230, 10, 150, 30)
+        self.speedSlider.valueChanged.connect(self.changeSpeed)
+        
         self.applyStylesheet(solveButton, 'src/styles.qss')
         
     def initAlgorithms(self) -> None:
@@ -97,3 +105,8 @@ class GridWindow(QMainWindow):
 
     def noPathFoundHandler(self):
         QMessageBox.warning(self, "No Path Found", "There is no possible path from start to end.")
+        
+    def changeSpeed(self):
+        speed = self.speedSlider.value()
+        for algorithm in self.algorithmToInstanceMap.values():
+            algorithm.setDelay(speed)

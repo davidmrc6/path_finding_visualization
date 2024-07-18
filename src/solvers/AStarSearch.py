@@ -14,6 +14,10 @@ class AStarSearch(QObject):
         self.cols = gridWidget.cols
         self.cells = gridWidget.cells
         self._stop_event = threading.Event()
+        self.delay = 0.05
+        
+    def setDelay(self, speed):
+        self.delay = 1 / speed
 
     def findStartEnd(self):
         start = end = None
@@ -49,7 +53,7 @@ class AStarSearch(QObject):
             visited.add(current)
             if current != start and current != end:
                 self.updateCellState.emit(row, col, 'checked')
-            time.sleep(0.05)
+            time.sleep(self.delay)
 
             if current == end:
                 self.tracePath(parent, end, start)

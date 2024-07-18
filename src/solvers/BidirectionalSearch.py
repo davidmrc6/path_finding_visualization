@@ -13,6 +13,10 @@ class BidirectionalSearch(QObject):
         self.cols = gridWidget.cols
         self.cells = gridWidget.cells
         self._stop_event = threading.Event()
+        self.delay = 0.05
+        
+    def setDelay(self, speed):
+        self.delay = 1 / speed
 
     def findStartEnd(self):
         start = end = None
@@ -52,7 +56,7 @@ class BidirectionalSearch(QObject):
                 row, col = node
                 if node != start and node != end:
                     self.updateCellState.emit(row, col, 'path')
-                time.sleep(0.05)
+                time.sleep(self.delay)
 
         while queue_start and queue_end and not self._stop_event.is_set():
             if queue_start:
