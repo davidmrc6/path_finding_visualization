@@ -14,6 +14,7 @@ from src.solvers.JumpPointSearch import JumpPointSearch
 from src.solvers.BidirectionalSearch import BidirectionalSearch
 
 from dialogs.AlgorithmSelectionDialog import AlgorithmSelectionDialog
+from dialogs.ResetDialog import ResetDialog
 
 class GridWindow(QMainWindow):
     
@@ -93,7 +94,12 @@ class GridWindow(QMainWindow):
         overlay.deleteLater()
         
     def resetClicked(self) -> None:
-        pass
+        overlay = self.showBlurOverlay()
+        dialog = ResetDialog(self)
+        if dialog.exec_() == QDialog.Accepted:
+            option = dialog.getSelectedOption()
+            self.gridWidget.resetGrid(option)
+        overlay.deleteLater()
     
     def showBlurOverlay(self):
         overlay = QWidget(self)

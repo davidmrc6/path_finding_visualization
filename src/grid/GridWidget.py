@@ -52,6 +52,17 @@ class GridWidget(QGraphicsView):
     
     def updateEndNodeState(self) -> None:
         self.hasEndNode = not self.hasEndNode 
+        
+    def resetGrid(self, option) -> None:
+        for row in range(self.rows):
+            for col in range(self.cols):
+                cell = self.cells[row][col]
+                if option == 'all':
+                    cell.setState('empty')
+                elif option == 'checked_path' and cell.getState() in ('checked', 'path'):
+                    cell.setState('empty')
+                elif option == 'obstacle' and cell.getState() == 'obstacle':
+                    cell.setState('empty')
     
     '''
     Forwards mouse events to eventHandler
