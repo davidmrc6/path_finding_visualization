@@ -5,6 +5,7 @@ from PyQt5.QtCore import pyqtSignal, QObject
 
 class JumpPointSearch(QObject):
     updateCellState = pyqtSignal(int, int, str)
+    noPathFound = pyqtSignal()
 
     def __init__(self, gridWidget):
         super().__init__()
@@ -100,6 +101,8 @@ class JumpPointSearch(QObject):
                         f_cost = tentative_g_cost + self.heuristic(neighbor, end)
                         heapq.heappush(open_set, (f_cost, neighbor))
                         parent[neighbor] = current
+                        
+        self.noPathFound.emit()
 
     def tracePath(self, parent, end, start):
         current = end

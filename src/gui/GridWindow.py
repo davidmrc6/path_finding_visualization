@@ -5,7 +5,7 @@ Module for defining the main window of the application.
 
 import os
 
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QDialog, QWidget
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QDialog, QMessageBox
 from PyQt5.QtCore import pyqtSlot
 
 from src.grid.GridWidget import GridWidget
@@ -78,6 +78,7 @@ class GridWindow(QMainWindow):
         for name, cls in algorithmToClassMap.items():
             instance = cls(self.gridWidget)
             instance.updateCellState.connect(self.gridWidget.setCellState)
+            instance.noPathFound.connect(self.noPathFoundHandler)
             self.algorithmToInstanceMap[name] = instance
         
         self.currentSearch = None # keeps track of current algorithm
@@ -92,3 +93,7 @@ class GridWindow(QMainWindow):
         if os.path.exists(stylesheet_path):
             with open(stylesheet_path, 'r') as file:
                 widget.setStyleSheet(file.read())
+
+
+    def noPathFoundHandler(self):
+        QMessageBox.warning(self, "No Path Found", "There is no possible path from start to end.")

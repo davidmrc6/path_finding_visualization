@@ -4,6 +4,7 @@ from PyQt5.QtCore import pyqtSignal, QObject
 
 class BidirectionalSearch(QObject):
     updateCellState = pyqtSignal(int, int, str)
+    noPathFound = pyqtSignal()
 
     def __init__(self, gridWidget):
         super().__init__()
@@ -91,6 +92,8 @@ class BidirectionalSearch(QObject):
                             if neighbor_end != start and neighbor_end != end:
                                 self.updateCellState.emit(nr, nc, 'checked')
                             time.sleep(0.05)
+                            
+        self.noPathFound.emit()
 
     def startSearch(self):
         self._stop_event.clear()

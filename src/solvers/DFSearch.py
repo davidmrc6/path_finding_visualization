@@ -4,6 +4,7 @@ from PyQt5.QtCore import pyqtSignal, QObject
 
 class DFSearch(QObject):
     updateCellState = pyqtSignal(int, int, str)
+    noPathFound = pyqtSignal()
 
     def __init__(self, gridWidget):
         super().__init__()
@@ -54,6 +55,8 @@ class DFSearch(QObject):
                     if self.cells[nr][nc].getState() in ('empty', 'end') and (nr, nc) not in visited:
                         stack.append((nr, nc))
                         parent[(nr, nc)] = current
+                        
+        self.noPathFound.emit()
 
     def tracePath(self, parent, end, start):
         current = end

@@ -5,6 +5,7 @@ from PyQt5.QtCore import pyqtSignal, QObject
 
 class DijkstraSearch(QObject):
     updateCellState = pyqtSignal(int, int, str)
+    noPathFound = pyqtSignal()
 
     def __init__(self, gridWidget):
         super().__init__()
@@ -59,6 +60,8 @@ class DijkstraSearch(QObject):
                             distances[(nr, nc)] = new_distance
                             heapq.heappush(priority_queue, (new_distance, (nr, nc)))
                             parent[(nr, nc)] = current
+                            
+        self.noPathFound.emit()
 
     def tracePath(self, parent, end, start):
         current = end

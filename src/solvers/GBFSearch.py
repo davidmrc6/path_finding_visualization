@@ -5,6 +5,7 @@ from PyQt5.QtCore import pyqtSignal, QObject
 
 class GBFSearch(QObject):
     updateCellState = pyqtSignal(int, int, str)
+    noPathFound = pyqtSignal()
 
     def __init__(self, gridWidget):
         super().__init__()
@@ -59,6 +60,8 @@ class GBFSearch(QObject):
                         if (nr, nc) not in visited:
                             heapq.heappush(open_set, (self.heuristic((nr, nc), end), (nr, nc)))
                             parent[(nr, nc)] = current
+                            
+        self.noPathFound.emit()
 
     def tracePath(self, parent, end, start):
         current = end

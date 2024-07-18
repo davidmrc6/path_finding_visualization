@@ -5,6 +5,7 @@ from PyQt5.QtCore import pyqtSignal, QObject
 
 class AStarSearch(QObject):
     updateCellState = pyqtSignal(int, int, str)
+    noPathFound = pyqtSignal()
 
     def __init__(self, gridWidget):
         super().__init__()
@@ -65,6 +66,8 @@ class AStarSearch(QObject):
                             f_costs[(nr, nc)] = f_cost
                             heapq.heappush(open_set, (f_cost, (nr, nc)))
                             parent[(nr, nc)] = current
+                            
+        self.noPathFound.emit()
 
     def tracePath(self, parent, end, start):
         current = end
