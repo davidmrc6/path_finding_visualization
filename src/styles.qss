@@ -13,23 +13,3 @@ QLabel {
     font-weight: bold;
     color: #333333;
 }
-
-QPushButton#solveButton  {
-    background-color: #4CAF50;
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 10px;
-    border-color: #1E8449;
-    font: bold 12px;
-    color: white;
-    padding: 6px;
-}
-
-QPushButton#solveButton:hover {
-    background-color: #45a049;
-}
-
-QPushButton#solveButton:pressed {
-    background-color: #1E8449;
-    border-style: inset;
-}

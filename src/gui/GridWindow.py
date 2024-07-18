@@ -13,7 +13,7 @@ from src.solvers.GBFSearch import GBFSearch
 from src.solvers.JumpPointSearch import JumpPointSearch
 from src.solvers.BidirectionalSearch import BidirectionalSearch
 
-from src.gui.AlgorithmSelectionDialog import AlgorithmSelectionDialog
+from dialogs.AlgorithmSelectionDialog import AlgorithmSelectionDialog
 
 class GridWindow(QMainWindow):
     
@@ -34,6 +34,12 @@ class GridWindow(QMainWindow):
         solveButton.setObjectName('solveButton')
         solveButton.clicked.connect(self.solverClicked)
         solveButton.setGeometry(10, 10, 100, 30)
+        
+        # Initialize reset button
+        resetButton = QPushButton('Reset', self)
+        resetButton.setObjectName('resetButton')
+        resetButton.clicked.connect(self.resetClicked)
+        resetButton.setGeometry(120, 10, 100, 30)
         
         self.applyStylesheet(solveButton, 'src/styles.qss')
         
@@ -85,6 +91,9 @@ class GridWindow(QMainWindow):
                 self.currentSearch.startSearch()
             
         overlay.deleteLater()
+        
+    def resetClicked(self) -> None:
+        pass
     
     def showBlurOverlay(self):
         overlay = QWidget(self)
