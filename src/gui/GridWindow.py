@@ -45,7 +45,7 @@ class GridWindow(QMainWindow):
         
     def initUI(self) -> None:
         # Initialize grid widget
-        self.gridWidget = GridWidget(rows=25, cols=40, cell_size=45)
+        self.gridWidget = GridWidget(rows=30, cols=40, cell_size=45)
         self.setCentralWidget(self.gridWidget)
         
         # Initialize solve button
