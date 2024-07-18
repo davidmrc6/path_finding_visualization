@@ -35,6 +35,10 @@ class WindowEventHandler:
         overlay.deleteLater()
         
     def resetClicked(self) -> None:
+        
+        if self.grid_window.currentSearch and self.grid_window.currentSearch.search_thread.is_alive():
+            self.grid_window.currentSearch.stopSearch()
+        
         overlay = self.showBlurOverlay()
         dialog = ResetDialog(self.grid_window)
         if dialog.exec_() == QDialog.Accepted:
