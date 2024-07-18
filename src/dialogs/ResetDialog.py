@@ -1,7 +1,22 @@
+"""
+This module contains the ResetDialog class, which is a dialog that allows the user to select a reset option.
+"""
+
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel
 from PyQt5.QtCore import Qt
 
 class ResetDialog(QDialog):
+    """
+    Class that represents the reset dialog.
+    
+    The dialog allows the user to select a reset option from the following:
+        - Reset All Cells
+        - Reset Checked/Path Cells
+        - Reset Obstacle Cells
+
+    Args:
+        QDialog: The QDialog class is the base class of dialog windows.
+    """
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Reset Options")
@@ -28,9 +43,21 @@ class ResetDialog(QDialog):
 
         self.setLayout(layout)
 
-    def selectOption(self, option):
+    def selectOption(self, option: str):
+        """
+        Handle the reset option selection event.
+
+        Args:
+            option (str): the reset option selected by the user.
+        """
         self.selectedOption = option
         self.accept()
 
-    def getSelectedOption(self):
+    def getSelectedOption(self) -> str:
+        """
+        Get the selected reset option.
+
+        Returns:
+            str: the selected reset option.
+        """
         return self.selectedOption
