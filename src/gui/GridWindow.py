@@ -45,37 +45,22 @@ class GridWindow(QMainWindow):
         self.applyStylesheet(solveButton, 'src/styles.qss')
         
     def initAlgorithms(self) -> None:
-        # TODO instantiate search type after selection?
-        self.bfs = BFSearch(self.gridWidget)
-        self.bfs.updateCellState.connect(self.gridWidget.setCellState)
         
-        self.dfs = DFSearch(self.gridWidget)
-        self.dfs.updateCellState.connect(self.gridWidget.setCellState)
-        
-        self.dijkstra = DijkstraSearch(self.gridWidget)
-        self.dijkstra.updateCellState.connect(self.gridWidget.setCellState)
-        
-        self.astar = AStarSearch(self.gridWidget)
-        self.astar.updateCellState.connect(self.gridWidget.setCellState)
-        
-        self.gbfs = GBFSearch(self.gridWidget)
-        self.gbfs.updateCellState.connect(self.gridWidget.setCellState)
-        
-        self.jps = JumpPointSearch(self.gridWidget)
-        self.jps.updateCellState.connect(self.gridWidget.setCellState)
-        
-        self.bisearch = BidirectionalSearch(self.gridWidget)
-        self.bisearch.updateCellState.connect(self.gridWidget.setCellState)
-        
-        self.algorithmToInstanceMap = {
-            'bfs': self.bfs,
-            'dfs': self.dfs,
-            'dijkstra': self.dijkstra,
-            'astar': self.astar,
-            'gbfs': self.gbfs,
-            'jps': self.jps,
-            'bisearch': self.bisearch
+        algorithmToClassMap = {
+            'bfs': BFSearch,
+            'dfs': DFSearch,
+            'dijkstra': DijkstraSearch,
+            'astar': AStarSearch,
+            'gbfs': GBFSearch,
+            'jps': JumpPointSearch,
+            'bisearch': BidirectionalSearch
         }
+        
+        self.algorithmToInstanceMap = {}
+        for name, cls in algorithmToClassMap.items():
+            instance = cls(self.gridWidget)
+            instance.updateCellState.connect(self.gridWidget.setCellState)
+            self.algorithmToInstanceMap[name] = instance
         
         self.currentSearch = None # keeps track of current algorithm
         

@@ -59,6 +59,8 @@ class GridWidget(QGraphicsView):
                 cell = self.cells[row][col]
                 if option == 'all':
                     cell.setState('empty')
+                    self.hasStartNode = False
+                    self.hasEndNode = False
                 elif option == 'checked_path' and cell.getState() in ('checked', 'path'):
                     cell.setState('empty')
                 elif option == 'obstacle' and cell.getState() == 'obstacle':
