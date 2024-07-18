@@ -1,9 +1,16 @@
+"""
+Module for defining the main window of the application.
+    
+"""
+
 import os
 
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QDialog, QWidget
 from PyQt5.QtCore import pyqtSlot
 
 from src.grid.GridWidget import GridWidget
+
+from src.eventHandlers.WindowEventHandler import WindowEventHandler
 
 from src.solvers.BFSearch import BFSearch
 from src.solvers.DFSearch import DFSearch
@@ -13,13 +20,24 @@ from src.solvers.GBFSearch import GBFSearch
 from src.solvers.JumpPointSearch import JumpPointSearch
 from src.solvers.BidirectionalSearch import BidirectionalSearch
 
-from dialogs.AlgorithmSelectionDialog import AlgorithmSelectionDialog
-from dialogs.ResetDialog import ResetDialog
+from src.dialogs.AlgorithmSelectionDialog import AlgorithmSelectionDialog
+from src.dialogs.ResetDialog import ResetDialog
+
 
 class GridWindow(QMainWindow):
+    """
+    Main window of the application.
+    
+    This class represents the main window of the application, which
+    involves creating a grid widget (of Cell objects) for visualizing
+    path finding algorithms.
+    
+    """
     
     def __init__(self) -> None:
         super().__init__()
+        
+        self.eventHandler = WindowEventHandler(self)
         
         self.setWindowTitle('Path Finding Algorithm Visualization')
         self.initUI()
@@ -33,13 +51,13 @@ class GridWindow(QMainWindow):
         # Initialize solve button
         solveButton = QPushButton('Solve', self)
         solveButton.setObjectName('solveButton')
-        solveButton.clicked.connect(self.solverClicked)
+        solveButton.clicked.connect(self.eventHandler.solverClicked)
         solveButton.setGeometry(10, 10, 100, 30)
         
         # Initialize reset button
         resetButton = QPushButton('Reset', self)
         resetButton.setObjectName('resetButton')
-        resetButton.clicked.connect(self.resetClicked)
+        resetButton.clicked.connect(self.eventHandler.resetClicked)
         resetButton.setGeometry(120, 10, 100, 30)
         
         self.applyStylesheet(solveButton, 'src/styles.qss')
@@ -63,37 +81,6 @@ class GridWindow(QMainWindow):
             self.algorithmToInstanceMap[name] = instance
         
         self.currentSearch = None # keeps track of current algorithm
-        
-    def solverClicked(self) -> None:
-        print("Solve button clicked")
-        overlay = self.showBlurOverlay()
-        dialog = AlgorithmSelectionDialog(self)
-        if dialog.exec_() == QDialog.Accepted:
-            selectedAlgorithm = dialog.getSelectedAlgorithm()
-            
-            self.currentSearch = self.algorithmToInstanceMap[selectedAlgorithm]
-                
-            if self.currentSearch:
-                self.gridWidget.resetGrid('checked_path')
-                self.currentSearch.startSearch()
-            
-        overlay.deleteLater()
-        
-    def resetClicked(self) -> None:
-        overlay = self.showBlurOverlay()
-        dialog = ResetDialog(self)
-        if dialog.exec_() == QDialog.Accepted:
-            option = dialog.getSelectedOption()
-            self.gridWidget.resetGrid(option)
-        overlay.deleteLater()
-    
-    def showBlurOverlay(self):
-        overlay = QWidget(self)
-        overlay.setObjectName("blurOverlay")
-        overlay.setGeometry(self.rect())
-        self.applyStylesheet(overlay, 'src/styles.qss')
-        overlay.show()
-        return overlay
         
     @pyqtSlot()
     def closeEvent(self, event):
