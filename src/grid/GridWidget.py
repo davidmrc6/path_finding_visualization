@@ -59,3 +59,11 @@ class GridWidget(QGraphicsView):
     def mousePressEvent(self, event) -> None:
         self.eventHandler.handleMousePress(event)
         super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event) -> None:
+        self.eventHandler.handleMouseMove(event)
+        super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event) -> None:
+        self.eventHandler.handleMouseRelease(event)
+        super().mouseReleaseEvent(event)

@@ -1,5 +1,4 @@
-from PyQt5.QtCore import Qt, QPointF, QPropertyAnimation, QByteArray
-from PyQt5.QtWidgets import QGraphicsTextItem, QGraphicsScene
+from PyQt5.QtCore import Qt, QPropertyAnimation
 from PyQt5.QtGui import QFont
 from src.grid.Cell import Cell
 from src.custom.CustomGraphicsTextItem import CustomGraphicsTextItem
@@ -8,47 +7,69 @@ class GridEventHandler:
     def __init__(self, gridWidget) -> None:
         self.gridWidget = gridWidget
         self.activePopups = {}
+        self.dragging = False
+        self.dragState = None
         
     def handleMousePress(self, event) -> None:
-        scenePos = self.gridWidget.mapToScene(event.pos())
-        item = self.gridWidget.scene.itemAt(scenePos, self.gridWidget.transform())
+        item = self.getCellFromEvent(event)
         
         if isinstance(item, Cell):
-            
-            # Left button is used for setting start and end nodes
             if event.button() == Qt.LeftButton:
-                # Start node
-                if item.getState() == 'empty' and self.gridWidget.getStartNodeState() == False:
-                    item.setState('start')
-                    self.gridWidget.updateStartNodeState()
-                    self.showPopupText(item, 'Start')
-                elif item.getState() == 'start':
-                    item.setState('empty')
-                    self.gridWidget.updateStartNodeState()
-                    self.showPopupText(item, 'Empty')
-                # End node
-                if item.getState() == 'empty' and self.gridWidget.getEndNodeState() == False:
-                    item.setState('end')
-                    self.gridWidget.updateEndNodeState()
-                    self.showPopupText(item, 'End')
-                elif item.getState() == 'end':
-                    item.setState('empty')
-                    self.gridWidget.updateEndNodeState()
-                    self.showPopupText(item, 'Empty')
+                self.handleLeftClick(item)
+            elif event.button() == Qt.RightButton:
+                self.dragging = True
+                self.setDragState(item)
+                self.handleRightClick(item)
+                    
+    def handleMouseRelease(self, event) -> None:
+        if event.button() == Qt.RightButton:
+            self.dragging = False
+            self.dragState = None
+    
+    def handleMouseMove(self, event) -> None:
+        if self.dragging:
+            item = self.getCellFromEvent(event)
+            if isinstance(item, Cell):
+                self.handleRightClick(item)
+    
+    def handleLeftClick(self, item: Cell) -> None:
+        if item.getState() == 'empty':
+            if not self.gridWidget.getStartNodeState():
+                self.updateCellState(item, 'start', 'Start')
+                self.gridWidget.updateStartNodeState()
+            elif not self.gridWidget.getEndNodeState():
+                self.updateCellState(item, 'end', 'End')
+                self.gridWidget.updateEndNodeState()
+        elif item.getState() == 'start':
+            self.updateCellState(item, 'empty', 'Empty')
+            self.gridWidget.updateStartNodeState()
+        elif item.getState() == 'end':
+            self.updateCellState(item, 'empty', 'Empty')
+            self.gridWidget.updateEndNodeState()
             
-            # Right button is used for setting (and removing) obstacles
-            if event.button() == Qt.RightButton:
-                if item.getState() == 'empty':
-                    item.setState('obstacle')
-                    self.showPopupText(item, 'Obstacle')
-                elif item.getState() == 'obstacle':
-                    item.setState('empty')
-                    self.showPopupText(item, 'Empty')
-                
+    def handleRightClick(self, item: Cell) -> None:
+        if self.dragState == 'obstacle' and item.getState() == 'empty':
+            self.updateCellState(item, 'obstacle', 'Obstacle')
+        elif self.dragState == 'empty' and item.getState() == 'obstacle':
+            self.updateCellState(item, 'empty', 'Empty')
+    
+    def updateCellState(self, item: Cell, newState: str, popupText: str) -> None:
+        item.setState(newState)
+        self.showPopupText(item, popupText)
+        
+    def getCellFromEvent(self, event):
+        scenePos = self.gridWidget.mapToScene(event.pos())
+        return self.gridWidget.scene.itemAt(scenePos, self.gridWidget.transform())
+    
+    def setDragState(self, item: Cell) -> None:
+        if item.getState() == 'empty':
+            self.dragState = 'obstacle'
+        elif item.getState() == 'obstacle':
+            self.dragState = 'empty'
+    
     def showPopupText(self, cell: Cell, text: str) -> None:
         cellPos = (cell.x(), cell.y())
 
-        # Remove existing popup if present
         if cellPos in self.activePopups:
             popupText, animation = self.activePopups[cellPos]
             animation.stop()
@@ -58,14 +79,12 @@ class GridEventHandler:
         popupText.setDefaultTextColor(Qt.black)
         popupText.setPos(cell.x(), cell.y() - cell.rect().height() / 2)
         self.gridWidget.scene.addItem(popupText)
-        
-        # Set font
+
         font = QFont("Segoe UI", 8)
         popupText.setFont(font)
 
-        # Animation to fade out the text
         animation = QPropertyAnimation(popupText, b"opacity")
-        animation.setDuration(1000)  # 1 second
+        animation.setDuration(1000)
         animation.setStartValue(1.0)
         animation.setEndValue(0.0)
         animation.finished.connect(lambda: self.removePopupText(cellPos))

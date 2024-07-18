@@ -22,7 +22,22 @@ class GridWindow(QMainWindow):
         
         self.setWindowTitle('Path Finding Algorithm Visualization')
         self.initUI()
+        self.initAlgorithms()
         
+    def initUI(self) -> None:
+        # Initialize grid widget
+        self.gridWidget = GridWidget(rows=25, cols=40, cell_size=45)
+        self.setCentralWidget(self.gridWidget)
+        
+        # Initialize solve button
+        solveButton = QPushButton('Solve', self)
+        solveButton.setObjectName('solveButton')
+        solveButton.clicked.connect(self.solverClicked)
+        solveButton.setGeometry(10, 10, 100, 30)
+        
+        self.applyStylesheet(solveButton, 'src/styles.qss')
+        
+    def initAlgorithms(self) -> None:
         # TODO instantiate search type after selection?
         self.bfs = BFSearch(self.gridWidget)
         self.bfs.updateCellState.connect(self.gridWidget.setCellState)
@@ -56,19 +71,6 @@ class GridWindow(QMainWindow):
         }
         
         self.currentSearch = None # keeps track of current algorithm
-        
-    def initUI(self) -> None:
-        # Initialize grid widget
-        self.gridWidget = GridWidget(rows=25, cols=40, cell_size=45)
-        self.setCentralWidget(self.gridWidget)
-        
-        # Initialize solve button
-        solveButton = QPushButton('Solve', self)
-        solveButton.setObjectName('solveButton')
-        solveButton.clicked.connect(self.solverClicked)
-        solveButton.setGeometry(10, 10, 100, 30)
-        
-        self.applyStylesheet(solveButton, 'src/styles.qss')
         
     def solverClicked(self) -> None:
         print("Solve button clicked")
