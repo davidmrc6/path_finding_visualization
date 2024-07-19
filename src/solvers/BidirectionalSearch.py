@@ -1,9 +1,45 @@
+"""
+This module contains the implementation of the Bidirectional Search algorithm.
+"""
+
 import time
 
 from src.solvers.BaseSearch import BaseSearch
 
 class BidirectionalSearch(BaseSearch):
+    """
+    Bidirectional search algorithm.
+    
+    Bidirectional Search is a graph search algorithm which finds the shortest
+    path between a specified source node and a specified destination node (in a directed graph).
+    It runs two simultaenous searches, one forward from the source node, and one backward from 
+    the destination node. 
+
+    Args:
+        BaseSearch: Base class for all search algorithms.
+    """
     def bidirectionalSearch(self):
+        """
+        Implements the Bidirectional Search algorithm to find the shortest path
+        from the source node to the destination node.
+
+        Algorithm:
+            1. Initialize two queues - one starting from the source node
+            and one starting from the destination node.
+            2. While both queues are not empty:
+                2.1. Remove the first node from the start queue.
+                2.2. If the node has already been visited, continue to the
+                next iteration.
+                2.3. If the node is not the start or end node, update its
+                state.
+                2.4. If the node is the end node, trace the path and return.
+                2.5. For each neighbor of the node:
+                    2.5.1. If the neighbor is not the start or end node, push
+                    it into the queue.
+                2.6 Repeat the same process for the end queue.
+            3. Trace the path from the queue which has the least number of
+            nodes.
+        """
         start, end = self.findStartEnd()
         if not start or not end:
             return
@@ -78,4 +114,7 @@ class BidirectionalSearch(BaseSearch):
             self.noPathFound.emit()
 
     def startSearch(self):
+        """
+        Start the search algorithm.
+        """
         super().startSearch(self.bidirectionalSearch)
