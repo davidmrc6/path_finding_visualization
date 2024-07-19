@@ -1,9 +1,40 @@
+"""
+This module contains the implementation of the BFS search algorithm.
+"""
+
 import time
 
 from src.solvers.BaseSearch import BaseSearch
 
 class BFSearch(BaseSearch):
+    """
+    BFS search algorithm.
+    
+    The BFS search algorithm is a tree traversal algorithm. It starts at
+    the root of the tree and explores all of the nodes at the present depth
+    prior to moving onto the nodes at the next depth level.
+
+    Args:
+        BaseSearch: base class for all search algorithms.
+    """
     def bfs(self):
+        """
+        Implements the BFS algorithm to find the shortest path from
+        the source node to the destination node.
+        
+        Algorithm:
+            1. Initialize the queue with the source node.
+            2. While the queue is not empty:
+                2.1. Remove the first node from the queue.
+                2.2. If the node has already been visited, continue to the
+                next iteration.
+                2.3. If the node is not the start or end node, update its
+                state.
+                2.4. If the node is the end node, trace the path and return.
+                2.5. For each neighbor of the node:
+                    2.5.1. If the neighbor is not the start or end node, push
+                    it into the queue.
+        """
         start, end = self.findStartEnd()
         if not start or not end:
             return
@@ -39,4 +70,7 @@ class BFSearch(BaseSearch):
             self.noPathFound.emit()
 
     def startSearch(self):
+        """
+        Start the search algorithm.
+        """
         super().startSearch(self.bfs)

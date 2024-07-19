@@ -1,10 +1,44 @@
+"""
+This module contains the implementation of the Dijkstra search algorithm.
+"""
+
 import heapq
 import time
 
 from src.solvers.BaseSearch import BaseSearch
 
 class DijkstraSearch(BaseSearch):
+    """
+    Dijkstra search algorithm. 
+    The Dijkstra search algorithm is an extension of the BFS search algorithm
+    for weighted graphs. 
+
+    Args:
+        BaseSearch: Base class for all search algorithms.
+    """
     def dijkstra(self):
+        """
+        Implements the Dijkstra algorithm to find the shortest path from
+        the source node to the destination node.
+
+        Algorithm:
+            1. Initialize the priority queue with the source node and
+                initialize the distance of the source node to 0.
+            2. While the priority queue is not empty:
+                2.1. Remove the node with the lowest distance from the
+                priority queue.
+                2.2. If the node has already been visited, continue to the
+                next iteration.
+                2.3. If the node is not the start or end node, update its
+                state.
+                2.4. If the node is the end node, trace the path and return.
+                2.5. For each neighbor of the node:
+                    2.5.1. Calculate the distance of the neighbor.
+                    2.5.2. If the distance of the neighbor is less than the
+                    current distance, update the distance and push the
+                    neighbor to the priority queue.
+                    2.5.3. Update the parent of the neighbor.
+        """
         start, end = self.findStartEnd()
         if not start or not end:
             return
@@ -44,4 +78,7 @@ class DijkstraSearch(BaseSearch):
             self.noPathFound.emit()
             
     def startSearch(self):
+        """
+        Start the search algorithm.
+        """
         super().startSearch(self.dijkstra)
