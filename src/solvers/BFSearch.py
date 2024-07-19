@@ -17,7 +17,7 @@ class BFSearch(BaseSearch):
     Args:
         BaseSearch: base class for all search algorithms.
     """
-    def bfs(self):
+    def bfs(self) -> None:
         """
         Implements the BFS algorithm to find the shortest path from
         the source node to the destination node.
@@ -69,7 +69,7 @@ class BFSearch(BaseSearch):
         if not self._stop_event.is_set():
             self.noPathFound.emit()
 
-    def startSearch(self):
+    def startSearch(self) -> None:
         """
         Start the search algorithm.
         """

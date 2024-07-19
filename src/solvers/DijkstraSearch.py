@@ -16,7 +16,7 @@ class DijkstraSearch(BaseSearch):
     Args:
         BaseSearch: Base class for all search algorithms.
     """
-    def dijkstra(self):
+    def dijkstra(self) -> None:
         """
         Implements the Dijkstra algorithm to find the shortest path from
         the source node to the destination node.
@@ -77,7 +77,7 @@ class DijkstraSearch(BaseSearch):
         if not self._stop_event.is_set():
             self.noPathFound.emit()
             
-    def startSearch(self):
+    def startSearch(self) -> None:
         """
         Start the search algorithm.
         """

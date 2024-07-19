@@ -17,7 +17,7 @@ class DFSearch(BaseSearch):
     Args:
         BaseSearch: The base class for all search algorithms.
     """
-    def dfs(self):
+    def dfs(self) -> None:
         """
         Implements the DFS algorithm to find the shortest path from
         the source node to the destination node.
@@ -69,7 +69,7 @@ class DFSearch(BaseSearch):
         if not self._stop_event.is_set():
             self.noPathFound.emit()
             
-    def startSearch(self):
+    def startSearch(self) -> None:
         """
         Start the search algorithm.
         """

@@ -18,7 +18,7 @@ class BidirectionalSearch(BaseSearch):
     Args:
         BaseSearch: Base class for all search algorithms.
     """
-    def bidirectionalSearch(self):
+    def bidirectionalSearch(self) -> None:
         """
         Implements the Bidirectional Search algorithm to find the shortest path
         from the source node to the destination node.
@@ -113,7 +113,7 @@ class BidirectionalSearch(BaseSearch):
         if not self._stop_event.is_set():
             self.noPathFound.emit()
 
-    def startSearch(self):
+    def startSearch(self) -> None:
         """
         Start the search algorithm.
         """
