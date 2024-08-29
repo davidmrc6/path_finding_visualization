@@ -21,7 +21,7 @@ If Python isn't installed, or the version isn't compatible, you may refer to the
 ```git clone https://github.com/davidmrc6/path_finding_visualization.git```
 
 ## Usage
-To run the application, navigate to the ```./path_finding_visualizer``` directory on your terminal. Then, run the `main.py` file with `python3 src/main.py`. <br />
+To run the application, navigate to the ```path_finding_visualizer``` directory on your terminal. Then, run the `main.py` file with `python src/main.py`. <br />
 
 This should open a window consisting of a grid of cells and three widgets on the top left corner of the window - a `Solve` button, a `Reset` button and a speed slider. <br />
 
