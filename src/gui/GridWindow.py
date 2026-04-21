@@ -16,7 +16,6 @@ from src.solvers.DFSearch import DFSearch
 from src.solvers.DijkstraSearch import DijkstraSearch
 from src.solvers.AStarSearch import AStarSearch
 from src.solvers.GBFSearch import GBFSearch
-from src.solvers.JumpPointSearch import JumpPointSearch
 from src.solvers.BidirectionalSearch import BidirectionalSearch
 
 from src.dialogs.AlgorithmSelectionDialog import AlgorithmSelectionDialog
@@ -92,7 +91,6 @@ class GridWindow(QMainWindow):
             'dijkstra': DijkstraSearch,
             'astar': AStarSearch,
             'gbfs': GBFSearch,
-            'jps': JumpPointSearch,
             'bisearch': BidirectionalSearch
         }
         

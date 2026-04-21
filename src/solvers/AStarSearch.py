@@ -66,7 +66,9 @@ class AStarSearch(BaseSearch):
         if not start or not end:
             return
 
-        open_set = [(0, start)]
+        self.obstacles = self.snapshotObstacles()
+
+        open_set = [(self.heuristic(start, end), start)]
         g_costs = {start: 0}
         f_costs = {start: self.heuristic(start, end)}
         parent = {start: None}
@@ -92,17 +94,16 @@ class AStarSearch(BaseSearch):
             # Check neighbors of current cell
             for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
                 nr, nc = row + dr, col + dc
-                if 0 <= nr < self.rows and 0 <= nc < self.cols:
-                    if self.cells[nr][nc].getState() in ('empty', 'end'):
-                        tentative_g_cost = g_costs[current] + 1  # Assuming uniform cost
-                        if (nr, nc) not in g_costs or tentative_g_cost < g_costs[(nr, nc)]:
-                            # Update g_cost and f_cost
-                            g_costs[(nr, nc)] = tentative_g_cost
-                            f_cost = tentative_g_cost + self.heuristic((nr, nc), end)
-                            f_costs[(nr, nc)] = f_cost
-                            heapq.heappush(open_set, (f_cost, (nr, nc)))
-                            parent[(nr, nc)] = current
-                            
+                if self.isFree(nr, nc):
+                    tentative_g_cost = g_costs[current] + 1  # Assuming uniform cost
+                    if (nr, nc) not in g_costs or tentative_g_cost < g_costs[(nr, nc)]:
+                        # Update g_cost and f_cost
+                        g_costs[(nr, nc)] = tentative_g_cost
+                        f_cost = tentative_g_cost + self.heuristic((nr, nc), end)
+                        f_costs[(nr, nc)] = f_cost
+                        heapq.heappush(open_set, (f_cost, (nr, nc)))
+                        parent[(nr, nc)] = current
+
         if not self._stop_event.is_set():
             self.noPathFound.emit()
 

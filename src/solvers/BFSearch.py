@@ -3,6 +3,7 @@ This module contains the implementation of the BFS search algorithm.
 """
 
 import time
+from collections import deque
 
 from src.solvers.BaseSearch import BaseSearch
 
@@ -38,19 +39,17 @@ class BFSearch(BaseSearch):
         start, end = self.findStartEnd()
         if not start or not end:
             return
-        
-        queue = [start]
-        visited = set()
+
+        self.obstacles = self.snapshotObstacles()
+
+        queue = deque([start])
+        visited = {start}
         parent = {start: None}
 
         while queue and not self._stop_event.is_set():
-            current = queue.pop(0)
+            current = queue.popleft()
             row, col = current
 
-            if current in visited:
-                continue
-
-            visited.add(current)
             if current != start and current != end:
                 self.updateCellState.emit(row, col, 'checked')
             time.sleep(self.delay)
@@ -61,11 +60,12 @@ class BFSearch(BaseSearch):
 
             for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
                 nr, nc = row + dr, col + dc
-                if 0 <= nr < self.rows and 0 <= nc < self.cols:
-                    if self.cells[nr][nc].getState() in ('empty', 'end') and (nr, nc) not in visited:
-                        queue.append((nr, nc))
-                        parent[(nr, nc)] = current
-                        
+                neighbor = (nr, nc)
+                if self.isFree(nr, nc) and neighbor not in visited:
+                    visited.add(neighbor)
+                    parent[neighbor] = current
+                    queue.append(neighbor)
+
         if not self._stop_event.is_set():
             self.noPathFound.emit()
 

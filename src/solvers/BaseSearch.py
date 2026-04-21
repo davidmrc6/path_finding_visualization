@@ -35,6 +35,29 @@ class BaseSearch(QObject):
         self.cells = gridWidget.cells
         self._stop_event = threading.Event()
         self.delay = 0.05
+        self.search_thread = None
+        self.obstacles = None
+
+    def snapshotObstacles(self) -> list:
+        """
+        Build a 2D boolean grid of obstacle positions.
+
+        Called on the worker thread at the start of each search so the
+        solver reads a stable view of the grid rather than racing with
+        UI-thread edits (the user can right-click cells at any time).
+
+        Returns:
+            list[list[bool]]: True where the cell is an obstacle.
+        """
+        return [[cell.getState() == 'obstacle' for cell in row] for row in self.cells]
+
+    def isFree(self, row: int, col: int) -> bool:
+        """
+        Check whether a cell is in-bounds and not an obstacle, per the snapshot.
+        """
+        return (0 <= row < self.rows
+                and 0 <= col < self.cols
+                and not self.obstacles[row][col])
 
     def setDelay(self, speed) -> None:
         """
@@ -77,7 +100,7 @@ class BaseSearch(QObject):
             if current != end and current != start:
                 self.updateCellState.emit(row, col, 'path')
             current = parent[current]
-            time.sleep(0.1)
+            time.sleep(self.delay)
 
     def startSearch(self, algorithm) -> None:
         """

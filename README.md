@@ -39,7 +39,6 @@ You are also able to reset the grid system by clicking on the `Reset` button. <b
     * Bidirectional Search
     * Dijkstra's Algorithm
     * Greedy First-Best Search
-    * Jump Point Search
     * <em>and more to come!</em>
 * Setting the speed at which the line following algorithms check cells according to personal preferences
 * Information about every path finding algorithm

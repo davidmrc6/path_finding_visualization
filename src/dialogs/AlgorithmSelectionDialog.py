@@ -19,13 +19,12 @@ class AlgorithmSelectionDialog(QDialog):
         - Dijkstra`s Algorithm
         - A* algorithm
         - Greedy Best-First Search
-        - Jump Point Search
         - Bidirectional Search
 
     Args:
         QDialog: The QDialog class is the base class of dialog windows.
     """
-    
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Select Path Finding Algorithm")
@@ -38,7 +37,6 @@ class AlgorithmSelectionDialog(QDialog):
             'dijkstra': 'Dijkstra`s Algorithm',
             'astar': 'A* algorithm',
             'gbfs': 'Greedy Best-First Search',
-            'jps': 'Jump Point Search',
             'bisearch': 'Bidirectional Search'
         }
         

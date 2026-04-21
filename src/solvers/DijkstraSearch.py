@@ -43,6 +43,8 @@ class DijkstraSearch(BaseSearch):
         if not start or not end:
             return
 
+        self.obstacles = self.snapshotObstacles()
+
         priority_queue = [(0, start)]
         distances = {start: 0}
         parent = {start: None}
@@ -66,14 +68,13 @@ class DijkstraSearch(BaseSearch):
 
             for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
                 nr, nc = row + dr, col + dc
-                if 0 <= nr < self.rows and 0 <= nc < self.cols:
-                    if self.cells[nr][nc].getState() in ('empty', 'end'):
-                        new_distance = current_distance + 1  # Assuming uniform cost
-                        if (nr, nc) not in distances or new_distance < distances[(nr, nc)]:
-                            distances[(nr, nc)] = new_distance
-                            heapq.heappush(priority_queue, (new_distance, (nr, nc)))
-                            parent[(nr, nc)] = current
-                            
+                if self.isFree(nr, nc):
+                    new_distance = current_distance + 1  # Assuming uniform cost
+                    if (nr, nc) not in distances or new_distance < distances[(nr, nc)]:
+                        distances[(nr, nc)] = new_distance
+                        heapq.heappush(priority_queue, (new_distance, (nr, nc)))
+                        parent[(nr, nc)] = current
+
         if not self._stop_event.is_set():
             self.noPathFound.emit()
             

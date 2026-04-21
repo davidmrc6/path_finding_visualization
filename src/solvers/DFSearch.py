@@ -9,10 +9,10 @@ from src.solvers.BaseSearch import BaseSearch
 class DFSearch(BaseSearch):
     """
     Depth First Search algorithm.
-    
-    The Depth First Search algorithm is a tree traversal algorithm. It starts
-    at the root of the tree and explores all of the nodes at the present depth
-    prior to moving onto the nodes at the next depth level.
+
+    DFS explores as far as possible along each branch before backtracking.
+    It uses a stack (LIFO) so the most recently discovered neighbor is the
+    next one expanded. DFS does not guarantee the shortest path.
 
     Args:
         BaseSearch: The base class for all search algorithms.
@@ -38,7 +38,9 @@ class DFSearch(BaseSearch):
         start, end = self.findStartEnd()
         if not start or not end:
             return
-        
+
+        self.obstacles = self.snapshotObstacles()
+
         stack = [start]
         visited = set()
         parent = {start: None}
@@ -61,11 +63,10 @@ class DFSearch(BaseSearch):
 
             for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
                 nr, nc = row + dr, col + dc
-                if 0 <= nr < self.rows and 0 <= nc < self.cols:
-                    if self.cells[nr][nc].getState() in ('empty', 'end') and (nr, nc) not in visited:
-                        stack.append((nr, nc))
-                        parent[(nr, nc)] = current
-                        
+                if self.isFree(nr, nc) and (nr, nc) not in visited:
+                    stack.append((nr, nc))
+                    parent[(nr, nc)] = current
+
         if not self._stop_event.is_set():
             self.noPathFound.emit()
             

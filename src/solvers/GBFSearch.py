@@ -65,48 +65,40 @@ class GBFSearch(BaseSearch):
         start, end = self.findStartEnd()
         if not start or not end:
             return
- 
-        open_set = [(0, start)]
+
+        self.obstacles = self.snapshotObstacles()
+
+        open_set = [(self.heuristic(start, end), start)]
         parent = {start: None}
         visited = set()
- 
+
         while open_set and not self._stop_event.is_set():
-            # Remove the node with the lowest cost from the open set.
-            current_f, current = heapq.heappop(open_set)
+            _, current = heapq.heappop(open_set)
             row, col = current
- 
-            # If the node has already been visited, continue to the next iteration.
+
             if current in visited:
                 continue
- 
+
             visited.add(current)
-            
+
             if current != start and current != end:
                 self.updateCellState.emit(row, col, 'checked')
             time.sleep(self.delay)
- 
+
             if current == end:
                 self.tracePath(parent, end, start)
                 return
- 
-            # Check all neighbors of current node
+
             for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
                 nr, nc = row + dr, col + dc
-                # Check that the neighbor is within the bounds of the grid.
-                if 0 <= nr < self.rows and 0 <= nc < self.cols:
-                    # If the neighbor is not the start or end node, calculate its cost.
-                    if self.cells[nr][nc].getState() in ('empty', 'end'):
-                        if (nr, nc) not in visited:
-                            # Calculate the cost of the neighbor.
-                            neighbor_cost = self.heuristic((nr, nc), end)
-                            # Update the costs and push the neighbor to the open set.
-                            heapq.heappush(open_set, (neighbor_cost, (nr, nc)))
-                            heapq.heappush(open_set, (self.heuristic((nr, nc), end), (nr, nc)))
-                            parent[(nr, nc)] = current
-                             
-        # If the open set is empty, there is no path to the destination node.
+                if self.isFree(nr, nc) and (nr, nc) not in visited:
+                    neighbor = (nr, nc)
+                    if neighbor not in parent:
+                        parent[neighbor] = current
+                        heapq.heappush(open_set, (self.heuristic(neighbor, end), neighbor))
+
         if not self._stop_event.is_set():
-             self.noPathFound.emit()
+            self.noPathFound.emit()
 
     def startSearch(self) -> None:
         """
