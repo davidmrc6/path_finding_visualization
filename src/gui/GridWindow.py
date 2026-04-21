@@ -4,7 +4,7 @@ Module for defining the main window of the application.
 """
 import os
 
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QDialog, QMessageBox, QSlider
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QDialog, QMessageBox, QSlider, QVBoxLayout, QHBoxLayout, QWidget, QLabel
 from PyQt5.QtCore import pyqtSlot, Qt
 
 from src.grid.GridWidget import GridWidget
@@ -53,31 +53,50 @@ class GridWindow(QMainWindow):
             - Reset button for resetting the grid.
             - Speed control slider for controlling the speed of the algorithm.
         """
-        # Initialize grid widget
-        self.gridWidget = GridWidget(rows=30, cols=40, cell_size=45)
-        self.setCentralWidget(self.gridWidget)
+        # Create a central widget and main layout
+        centralWidget = QWidget()
+        self.setCentralWidget(centralWidget)
+        mainLayout = QVBoxLayout(centralWidget)
+        mainLayout.setContentsMargins(15, 15, 15, 15)
+        mainLayout.setSpacing(10)
+
+        # Initialize top bar layout for buttons and slider
+        topBarLayout = QHBoxLayout()
+        topBarLayout.setSpacing(10)
         
         # Initialize solve button
         solveButton = QPushButton('Solve', self)
         solveButton.setObjectName('solveButton')
         solveButton.clicked.connect(self.eventHandler.solverClicked)
-        solveButton.setGeometry(10, 10, 100, 30)
+        topBarLayout.addWidget(solveButton)
         
         # Initialize reset button
         resetButton = QPushButton('Reset', self)
         resetButton.setObjectName('resetButton')
         resetButton.clicked.connect(self.eventHandler.resetClicked)
-        resetButton.setGeometry(120, 10, 100, 30)
+        topBarLayout.addWidget(resetButton)
         
+        # Add a stretch to separate buttons from slider
+        topBarLayout.addStretch()
+
+        # Speed label
+        speedLabel = QLabel('Speed:')
+        topBarLayout.addWidget(speedLabel)
+
         # Initialize speed control slider
         self.speedSlider = QSlider(Qt.Horizontal, self)
         self.speedSlider.setObjectName('speedSlider')
         self.speedSlider.setRange(1, 100)  # Speed range from 1 to 100
         self.speedSlider.setValue(50)  # Default value
-        self.speedSlider.setGeometry(230, 10, 150, 30)
+        self.speedSlider.setFixedWidth(150)
         self.speedSlider.valueChanged.connect(self.eventHandler.changeSpeed)
-        
-        self.applyStylesheet(solveButton, 'src/styles.qss')
+        topBarLayout.addWidget(self.speedSlider)
+
+        mainLayout.addLayout(topBarLayout)
+
+        # Initialize grid widget
+        self.gridWidget = GridWidget(rows=30, cols=40, cell_size=45)
+        mainLayout.addWidget(self.gridWidget)
         
     def initAlgorithms(self) -> None:
         """
@@ -125,18 +144,3 @@ class GridWindow(QMainWindow):
         if self.currentSearch and self.currentSearch.isRunning():
             self.currentSearch.stopSearch()
         self.currentSearch = None
-        
-    def applyStylesheet(self, widget, stylesheet_path) -> None:
-        """
-        Apply a stylesheet to a widget.
-        
-        This method read a stylesheet from a specified file path and applies
-        it onto a given widget.
-
-        Args:
-            widget: The widget onto which the stylesheet is to be applied.
-            stylesheet_path: The file path to the stylesheet (which is a .qss file).
-        """
-        if os.path.exists(stylesheet_path):
-            with open(stylesheet_path, 'r') as file:
-                widget.setStyleSheet(file.read())

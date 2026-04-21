@@ -41,18 +41,20 @@ class AlgorithmSelectionDialog(QDialog):
         }
         
         # Join path of algorithmInfo.txt
-        algorithmInfoPath = os.path.join("res", "algorithmInfo.txt")
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        algorithmInfoPath = os.path.join(base_dir, "res", "algorithmInfo.txt")
         
         self.algorithmInfo = self.loadAlgorithmInfo(algorithmInfoPath)
 
         layout = QVBoxLayout()
 
         title = QLabel("Select Path Finding Algorithm")
+        title.setObjectName("dialogTitle")
         title.setAlignment(Qt.AlignCenter)
         layout.addWidget(title)
         
         # Join path of info icon
-        icon_path = os.path.join("res", "info_icon.png")
+        icon_path = os.path.join(base_dir, "res", "info_icon.png")
 
         for key, name in self.algorithms.items():
             buttonLayout = QHBoxLayout()
@@ -62,6 +64,7 @@ class AlgorithmSelectionDialog(QDialog):
             buttonLayout.addWidget(button)
             
             infoButton = QPushButton()
+            infoButton.setObjectName("infoButton")
             infoButton.setIcon(QIcon(icon_path))
             infoButton.setFixedSize(30, 30)
             infoButton.clicked.connect(partial(self.showAlgorithmInfo, key))

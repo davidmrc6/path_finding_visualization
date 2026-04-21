@@ -23,16 +23,16 @@ class Cell(QGraphicsRectItem):
     
     # Dictionary mapping state of cell to color in grid
     stateColorMap = {
-        'empty': QColor(245, 245, 245),
-        'obstacle': QColor(102, 102, 102),
+        'empty': QColor("#f8f9fa"),
+        'obstacle': QColor("#2c3e50"),
         'checked': QColor(198, 198, 198),
-        'start': QColor(65, 252, 3),
-        'end': QColor(252, 3, 3),
+        'start': QColor("#27ae60"),
+        'end': QColor("#e74c3c"),
         'path': QColor(152, 111, 191)
     }
     
     # Color of border of cell
-    borderColor = QColor(102, 102, 102)
+    borderColor = QColor("#dcdde1")
     
     def __init__(self, x, y, size) -> None:
         super().__init__(0, 0, size, size)

@@ -29,6 +29,12 @@ def main() -> None:
     """
     app = QApplication(sys.argv)
 
+    # Apply global stylesheet
+    stylesheet_path = os.path.join(os.path.dirname(__file__), 'styles.qss')
+    if os.path.exists(stylesheet_path):
+        with open(stylesheet_path, 'r') as file:
+            app.setStyleSheet(file.read())
+
     window = GridWindow()
     window.show()
 

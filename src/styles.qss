@@ -1,15 +1,97 @@
-#blurOverlay {
-    background-color: rgba(0, 0, 0, 100);
+/* Main Window background */
+QMainWindow {
+    background-color: #f8f9fa;
 }
 
+/* Grid border */
+QGraphicsView {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background-color: #ffffff;
+}
+
+/* Buttons styling */
+QPushButton {
+    background-color: #e9ecef;
+    color: #495057;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: #dee2e6;
+    border-color: #adb5bd;
+}
+
+QPushButton:pressed {
+    background-color: #ced4da;
+}
+
+/* Specific styling for the Solve button to differentiate slightly if desired, 
+   but keeping it gray as requested. */
+#solveButton {
+    background-color: #f1f3f5;
+    font-weight: 500; /* Slightly more than normal but not 'bold' */
+}
+
+#resetButton {
+    background-color: #e9ecef;
+}
+
+/* Slider styling */
+QSlider::groove:horizontal {
+    border: 1px solid #dee2e6;
+    height: 6px;
+    background: #f1f3f5;
+    margin: 2px 0;
+    border-radius: 3px;
+}
+
+QSlider::handle:horizontal {
+    background: #adb5bd;
+    border: 1px solid #868e96;
+    width: 16px;
+    height: 16px;
+    margin: -6px 0;
+    border-radius: 8px;
+}
+
+QSlider::handle:horizontal:hover {
+    background: #868e96;
+}
+
+/* Dialogs styling */
 QDialog {
     background-color: #ffffff;
-    border-radius: 10px;
-    padding: 20px;
+    border: 1px solid #dee2e6;
 }
 
 QLabel {
+    font-size: 14px;
+    color: #495057;
+}
+
+QLabel#dialogTitle {
     font-size: 16px;
-    font-weight: bold;
-    color: #333333;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #212529;
+}
+
+#infoButton {
+    background-color: transparent;
+    border: 1px solid #dee2e6;
+    border-radius: 13px;
+    padding: 0px;
+}
+
+#infoButton:hover {
+    background-color: #f8f9fa;
+}
+
+#blurOverlay {
+    background-color: rgba(0, 0, 0, 80);
 }

@@ -86,22 +86,9 @@ class WindowEventHandler:
         overlay = QWidget(self.grid_window)
         overlay.setObjectName("blurOverlay")
         overlay.setGeometry(self.grid_window.rect())
-        self.applyStylesheet(overlay, 'src/styles.qss')
         overlay.show()
         return overlay
         
-    def applyStylesheet(self, widget, stylesheet_path) -> None:
-        """
-        Apply a stylesheet to a widget.
-
-        Args:
-            widget: The widget onto which the stylesheet is to be applied.
-            stylesheet_path: The file path to the stylesheet (which is a .qss file).
-        """
-        if os.path.exists(stylesheet_path):
-            with open(stylesheet_path, 'r') as file:
-                widget.setStyleSheet(file.read())
-                
     def noPathFoundHandler(self):
         """
         Handle the no path found event.

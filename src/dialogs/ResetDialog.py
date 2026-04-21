@@ -26,18 +26,22 @@ class ResetDialog(QDialog):
         layout = QVBoxLayout()
 
         title = QLabel("Choose Reset Option:")
+        title.setObjectName("dialogTitle")
         title.setAlignment(Qt.AlignCenter)
         layout.addWidget(title)
 
         self.allButton = QPushButton("Reset All Cells")
+        self.allButton.setObjectName("resetButton")
         self.allButton.clicked.connect(lambda: self.selectOption('all'))
         layout.addWidget(self.allButton)
 
         self.checkedPathButton = QPushButton("Reset Checked/Path Cells")
+        self.checkedPathButton.setObjectName("resetButton")
         self.checkedPathButton.clicked.connect(lambda: self.selectOption('checked_path'))
         layout.addWidget(self.checkedPathButton)
 
         self.obstacleButton = QPushButton("Reset Obstacle Cells")
+        self.obstacleButton.setObjectName("resetButton")
         self.obstacleButton.clicked.connect(lambda: self.selectOption('obstacle'))
         layout.addWidget(self.obstacleButton)
 
